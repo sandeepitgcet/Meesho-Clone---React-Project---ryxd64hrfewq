@@ -3,15 +3,18 @@ import ReactDOM from "react-dom/client";
 import App from "./components/App";
 
 import { createBrowserRouter, RouterProvider} from "react-router-dom";
-import Product from "./components/product";
+import Product from "./components/Product";
+import ErrorPage from "./components/ErrorPage";
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <App />
+    element: <App />,
+    errorElement: <ErrorPage />
   },
   {
-    path:"/product",
-    element: <App />
+    path:"/product/:id",
+    element:<Product />,
+    errorElement: <ErrorPage />
   }
 ]);
 

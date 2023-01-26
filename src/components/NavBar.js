@@ -164,6 +164,7 @@ export default function NavBar() {
             noWrap
             component="div"
             sx={{ display: { xs: 'none', sm: 'block', color:THEME_COLOR } }}
+            
           >
             MEESHO
           </Typography>

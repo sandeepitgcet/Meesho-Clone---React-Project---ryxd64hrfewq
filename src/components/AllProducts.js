@@ -17,8 +17,8 @@ export default function AllProducts() {
     },[])
 
     const openProductHandler = (product) => {
-        console.log(product);
-        navigate("/product");
+        //console.log(product);
+        navigate("/product/"+product.id, {state:product});
     }
     
     return (
