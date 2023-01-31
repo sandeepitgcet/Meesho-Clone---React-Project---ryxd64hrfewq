@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
-import NavBar from './NavBar'
+import NavBar from '../components/NavBar'
 import { Button, FormControl,TextField, Typography } from '@mui/material';
 import { Box } from '@mui/material';
-import { THEME_COLOR } from './../App';
+import { THEME_COLOR } from '../App';
 import styled from '@emotion/styled';
 import { Form, Link, useNavigate } from 'react-router-dom';
 import { signIn } from '../services/firebase/auth';

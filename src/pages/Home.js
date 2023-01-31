@@ -1,9 +1,9 @@
 import React from 'react'
-import NavBar from './NavBar';
-import AllProduct from './AllProduct';
-import Footer from './Footer';
+import NavBar from '../components/NavBar';
+import AllProduct from '../components/AllProduct';
+import Footer from '../components/Footer';
 import { Grid } from '@mui/material';
-import Filter from './Filter';
+import Filter from '../components/Filter';
 
 export default function Home() {
     

@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import NavBar from './NavBar';
+import NavBar from '../components/NavBar';
 import { Button, FormControl,TextField, Typography } from '@mui/material';
 import { Box, Alert } from '@mui/material';
 import Snackbar from '@mui/material/Snackbar';
-import { THEME_COLOR } from './../App';
+import { THEME_COLOR } from '../App';
 import styled from '@emotion/styled';
 import { Form, Link, useNavigate } from 'react-router-dom';
-import { signUp } from '../services/firebase/auth';
+import { addUser, signUp } from '../services/firebase/auth';
 
 const SignUpButton = styled(Button)(({ theme }) => ({
   backgroundColor: THEME_COLOR,
@@ -38,16 +38,18 @@ const SignUp = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log(user);
+        //console.log(user);
         const response = await signUp(user.email, user.password)
-        console.log(response);
+        console.log("SignUP DOne"+response.user.uid);
+        const addUserResponse  = await addUser(response.user.uid, user);
+        console.log("User Add to DB "+addUserResponse)
         if(response.isError){
-          handleClick(true);
+          //handleClick(true);
           return;
         }else{
-          setTimeout(()=>{
-            handleClick(false);
-          },3000)
+          // setTimeout(()=>{
+          //   handleClick(false);
+          // },3000)
           navigate('/')
           
         }
