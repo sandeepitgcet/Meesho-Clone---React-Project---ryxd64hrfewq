@@ -4,7 +4,7 @@ import { useLocation, useParams } from 'react-router-dom';
 import NavBar from './NavBar';
 import { styled } from '@mui/material/styles';
 import { Box, height } from '@mui/system';
-import { THEME_COLOR } from './App';
+import { THEME_COLOR } from './../App';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import KeyboardDoubleArrowRightOutlinedIcon from '@mui/icons-material/KeyboardDoubleArrowRightOutlined';
 

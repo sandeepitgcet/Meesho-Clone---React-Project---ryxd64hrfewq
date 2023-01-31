@@ -2,9 +2,10 @@ import React, { useState } from 'react'
 import NavBar from './NavBar'
 import { Button, FormControl,TextField, Typography } from '@mui/material';
 import { Box } from '@mui/material';
-import { THEME_COLOR } from './App';
+import { THEME_COLOR } from './../App';
 import styled from '@emotion/styled';
-import { Form, Link } from 'react-router-dom';
+import { Form, Link, useNavigate } from 'react-router-dom';
+import { signIn } from '../services/firebase/auth';
 
 const LoginButton = styled(Button)(({ theme }) => ({
   backgroundColor: THEME_COLOR,
@@ -16,9 +17,18 @@ const LoginButton = styled(Button)(({ theme }) => ({
 export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
   const [user, setUser] = useState({email:'', password:''})
+  const navigate = useNavigate();
   
-  const handleSubmit = () => {
+  const handleSubmit = async (e) => {
+    e.preventDefault();
     console.log(user);
+    const response = await signIn(user.email, user.password)
+    console.log(response);
+    if(response.isError){
+      return;
+    }else{
+      navigate(-1)
+    }
   }
   return (
     <React.Fragment>

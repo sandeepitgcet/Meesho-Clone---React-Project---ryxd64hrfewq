@@ -13,7 +13,7 @@ import SearchIcon from '@mui/icons-material/Search';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import MoreIcon from '@mui/icons-material/MoreVert';
-import { THEME_COLOR } from './App';
+import { THEME_COLOR } from './../App';
 import { useNavigate } from 'react-router-dom';
 
 const Search = styled('div')(({ theme }) => ({
@@ -194,7 +194,6 @@ export default function NavBar() {
               <IconButton size="large" color="inherit" >
                 <Badge badgeContent={17} color="error">
                   <NotificationsIcon />
-                  
                 </Badge>
               </IconButton>
               

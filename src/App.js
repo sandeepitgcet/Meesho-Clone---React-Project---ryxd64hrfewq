@@ -1,15 +1,14 @@
 import React from 'react'
-import Home from './Home';
-import './../styles/App.css';
+import Home from './components/Home';
+import './styles/App.css';
 
 export const THEME_COLOR = "rgb(244,51,151)"
 
 import { createBrowserRouter, RouterProvider} from "react-router-dom";
-import Product from "./Product";
-import ErrorPage from "./ErrorPage";
-import { display } from '@mui/system';
-import Login from './Login';
-import SignUp from './SignUp';
+import Product from "./components/Product";
+import ErrorPage from "./components/ErrorPage";
+import Login from './components/Login';
+import SignUp from './components/SignUp';
 
 
 const router = createBrowserRouter([
