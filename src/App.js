@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { createContext, useEffect, useState } from 'react'
 import Home from './pages/Home';
 import './styles/App.css';
 
@@ -9,7 +9,10 @@ import Product from "./components/Product";
 import ErrorPage from "./pages/ErrorPage";
 import Login from './pages/Login';
 import SignUp from './pages/SignUp';
+import { onAuthStateChanged } from 'firebase/auth';
+import { auth } from './services/firebase/auth';
 
+export const AuthContext = createContext();
 
 const router = createBrowserRouter([
   {
@@ -38,8 +41,28 @@ const router = createBrowserRouter([
 
 const App = () => {
 
+  const [user, setUser] = useState({});
+
+  useEffect(() => {
+    const handleAuthChange = (userr) => {
+      if (userr) {
+        setUser(userr)
+        return;
+      }
+      setUser({});
+    };
+
+    const unsubscribe = onAuthStateChanged(auth, handleAuthChange);
+
+    return () => unsubscribe();
+  }, []);
+
+
   return (
-        <RouterProvider router={router}/>
+        <AuthContext.Provider value={{user,setUser}}>
+          <RouterProvider router={router}/>
+        </AuthContext.Provider>
+        
   )
 }
 

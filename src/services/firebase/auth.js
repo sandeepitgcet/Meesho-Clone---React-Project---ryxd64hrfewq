@@ -1,8 +1,10 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 import { collection, getFirestore } from "firebase/firestore";
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "firebase/auth";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut as signOutFirebase } from "firebase/auth";
 import { doc, getDoc, addDoc } from "firebase/firestore";
+import { useContext } from "react";
+import { AuthContext } from "../../App";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -24,6 +26,7 @@ export const db = getFirestore(app);
 
 export const signUp = async (email, password) => {
     const isError = false;
+    
     const USER = await createUserWithEmailAndPassword(auth, email, password)
         .then((userCredential) => userCredential)
         .catch((error) => {
@@ -52,6 +55,14 @@ export const signIn = async (email, password) => {
         'isError': isError
     };
 };
+
+export const signOutLogin = async () => {
+    signOutFirebase(auth).then(() => {
+        console.log("signed out");
+      }).catch((error) => {
+        console.log("signed out");
+      });
+}
 
 export const addUser = async (userId,user) => {
     const res = await addDoc(collection(db, "users"), {...user,'uid':userId}).catch((error) => {
