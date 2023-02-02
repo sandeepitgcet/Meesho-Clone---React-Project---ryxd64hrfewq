@@ -10,6 +10,7 @@ export default function ErrorPage() {
   console.error(error);
 
   return (
+    
     <Box
       sx={{
         display: 'flex',

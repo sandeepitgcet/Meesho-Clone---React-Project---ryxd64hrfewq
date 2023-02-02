@@ -3,7 +3,7 @@ import React from 'react'
 
 const Filter = () => {
   return (
-    <Grid container sm={3} md={3} padding={2} >
+    <Grid container padding={2} >
         <Grid item >
             <Typography variant='h4'>Filter</Typography>
             <Grid item>

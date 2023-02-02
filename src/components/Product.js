@@ -1,7 +1,6 @@
 import { Button, Typography, Rating } from '@mui/material';
 import React, { useEffect, useState } from 'react'
 import { useLocation, useParams } from 'react-router-dom';
-import NavBar from './NavBar';
 import { styled } from '@mui/material/styles';
 import { Box, height } from '@mui/system';
 import { THEME_COLOR } from './../App';
@@ -30,7 +29,6 @@ export default function Product() {
     
   return (
     <React.Fragment>
-        <NavBar />
         <Box sx={{display:'grid', gridTemplateColumns:'repeat(auto-fit, minmax(550px, 1fr))'}}>
             <Box sx={{ display: 'flex', justifyContent:'center', padding:'50px', height:'500px'}}>
                 {/* <Card variant="outlined" sx={{ maxWidth: 345 }}><img src={product.image} height="500" style={{objectFit:"fill"}}/></Card> */}

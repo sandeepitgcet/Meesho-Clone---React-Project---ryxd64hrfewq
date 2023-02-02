@@ -30,8 +30,8 @@ export const signUp = async (email, password) => {
     const USER = await createUserWithEmailAndPassword(auth, email, password)
         .then((userCredential) => userCredential)
         .catch((error) => {
-            isError = true;
-            console.log(error);
+            //isError = true;
+            console.error(error);
             return error;
         });
     //console.log(USER);
@@ -49,7 +49,7 @@ export const signIn = async (email, password) => {
         })
         .catch((error) => {  
             console.error(error);
-            isError = true;
+            //isError = true;
         });
     return {
         'isError': isError

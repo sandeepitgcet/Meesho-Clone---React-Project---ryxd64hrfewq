@@ -5,8 +5,9 @@ import { Box, Alert } from '@mui/material';
 import Snackbar from '@mui/material/Snackbar';
 import { AuthContext, THEME_COLOR } from '../App';
 import styled from '@emotion/styled';
-import { Form, Link, useNavigate } from 'react-router-dom';
-import { addUser, signUp } from '../services/firebase/auth';
+import { Form, Link, useNavigate, useRouteError } from 'react-router-dom';
+import { addUser, auth, signUp } from '../services/firebase/auth';
+import { updateProfile } from 'firebase/auth';
 
 const SignUpButton = styled(Button)(({ theme }) => ({
   backgroundColor: THEME_COLOR,
@@ -15,11 +16,13 @@ const SignUpButton = styled(Button)(({ theme }) => ({
   }
 }));
 
+
 const SignUp = () => {
     const [showPassword, setShowPassword] = useState(false);
     const [userInput, setUserInput] = useState({fname:'',lname:'', email:'', password:''})
     const navigate = useNavigate();
     const {user, setUser} = useContext(AuthContext)
+
 
     if(user.uid){
       navigate('/')
@@ -46,9 +49,18 @@ const SignUp = () => {
         e.preventDefault();
         //console.log(user);
         const response = await signUp(userInput.email, userInput.password)
-        console.log("SignUP DOne"+response.user.uid);
+        console.log("SignUP DOne"+response?.user?.uid);
 
-        const addUserResponse  = await addUser(response.user.uid, userInput);
+
+        updateProfile(auth.currentUser, {
+          displayName:userInput.fname+" "+userInput.lname
+        }).catch((error) => {
+          console.log("err is ")
+          console.log(error.message)
+        });
+        
+
+        const addUserResponse  = await addUser(response?.user?.uid, userInput);
         console.log("User Add to DB "+addUserResponse)
         if(response.isError){
           //handleClick(true);
@@ -64,9 +76,7 @@ const SignUp = () => {
     }
     
   return (
-    <React.Fragment>
-    <NavBar />
-      <Box padding={2} sx={{ display: 'flex', flexWrap: 'wrap', flexDirection:'column', rowGap:'10px' }}>
+    <Box padding={2} sx={{ display: 'flex', flexWrap: 'wrap', flexDirection:'column', rowGap:'10px' }}>
       <Typography variant='h4' color={THEME_COLOR} sx={{display:'grid', placeItems:'center'}}>SIGN UP</Typography>
       <Form onSubmit={handleSubmit} style={{ display: 'flex', flexWrap: 'wrap', flexDirection:'column', rowGap:'10px' }}>
           <TextField fullWidth label="First Name" value={user.fname} onChange={(e)=>setUserInput({...user, fname:e.target.value})}/>
@@ -82,8 +92,7 @@ const SignUp = () => {
           Login {STATUS=="success"?"success":"failed"}
         </Alert>
       </Snackbar>
-      </Box>
-    </React.Fragment>
+    </Box>
   )
 }
 
