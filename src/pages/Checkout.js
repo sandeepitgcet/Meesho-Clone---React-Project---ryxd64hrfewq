@@ -77,6 +77,7 @@ const Summary = ({activeStep, formData, product}) => {
 const Checkout = () => {
     const {user} = useContext(AuthContext)
     const location = useLocation();
+    const navigate = useNavigate();
     const [activeStep, setActiveStep] = useState(0);
     const [formData, setFormData] = useState({address:'', payment:''});
     useEffect(()=>{

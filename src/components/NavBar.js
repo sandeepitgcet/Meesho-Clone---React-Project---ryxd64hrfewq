@@ -91,8 +91,6 @@ const NavBar = () => {
     const data = productsArr.filter((product) => product.title)
   }
 
-
-
   const show = location.pathname === '/login' || location.pathname === '/signup'
   
   return (
