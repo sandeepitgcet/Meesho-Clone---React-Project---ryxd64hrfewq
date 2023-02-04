@@ -1,22 +1,29 @@
 import React, { useEffect, useState } from 'react'
 import { Grid, Box } from '@mui/material'
 import { useNavigate, useSearchParams } from 'react-router-dom';
+import useFetchProduct from '../hooks/useFetchProduct';
+import { useDispatch, useSelector } from 'react-redux';
+import { getProduct, setProducts } from './../services/redux/productSlice'
 
 const AllProduct = () => {
     const [allProducts , setAllProducts] = useState([]);
     const [isLoading, setLoading] = useState(false);
     const navigate = useNavigate();
+    const dispatch = useDispatch();
+    const products = useSelector(state => state.products)
+
+
     useEffect(()=>{
         setLoading(true)
-        const fetchData = async () => {
-            const responseData = await fetch('https://content.newtonschool.co/v1/pr/63b6c911af4f30335b4b3b89/products')
-                .then(response => response.json()).finally(()=>{
-                    setLoading(false);
-                })
-            setAllProducts(responseData)
+        useFetchProduct().then((res)=>{
+            dispatch(setProducts(res.data))
+            setAllProducts(res.data);
+        }).catch((error)=>{
+            console.log("error while fetching alll products "+ error);
+        }).finally(()=>{
+            setLoading(false);
+        })
 
-        }
-        fetchData();
     },[])
 
     const openProductHandler = (product) => {

@@ -10,10 +10,13 @@ import { createBrowserRouter, RouterProvider, Outlet} from "react-router-dom";
 import Product from "./pages/Product";
 import ErrorPage from "./pages/ErrorPage";
 import Login from './pages/Login';
+import Checkout from './pages/Checkout'
 import SignUp from './pages/SignUp';
 import { onAuthStateChanged } from 'firebase/auth';
 import { auth } from './services/firebase/auth';
 import NavBar from './components/NavBar';
+
+//const Login = React.lazy(() => import('./pages/Login'));
 
 export const AuthContext = createContext();
 
@@ -46,6 +49,10 @@ const router = createBrowserRouter([
       {
         path:'signup',
         element: <SignUp />
+      },
+      {
+        path:'checkout',
+        element: <Checkout />
       }
     ]
   },

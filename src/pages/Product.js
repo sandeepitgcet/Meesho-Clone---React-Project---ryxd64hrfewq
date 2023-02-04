@@ -1,6 +1,6 @@
 import { Button, Typography, Rating, Skeleton } from '@mui/material';
 import React, { useEffect, useState } from 'react'
-import { useLocation, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { styled } from '@mui/material/styles';
 import { Box } from '@mui/system';
 import { THEME_COLOR } from '../App';
@@ -15,6 +15,7 @@ export default function Product() {
     const [isLoading, setLoading] = useState(false);
     const location = useLocation();
     const params = useParams();
+    const navigate = useNavigate();
     
     useEffect(()=>{
         console.log("Product component");
@@ -29,6 +30,12 @@ export default function Product() {
             //setLoading(false)
         })
     },[])
+
+    const buyNowHandle = () => {
+        navigate('/checkout', {
+            state:product
+        })
+    }
     
   return (
     <React.Fragment>
@@ -48,7 +55,7 @@ export default function Product() {
                 <Typography variant='h4'>{'₹'+product.price}</Typography>
                 <Box sx={{ display:'flex', justifyContent:'space-evenly'}}>
                     <Button variant="outlined"><ShoppingCartIcon></ShoppingCartIcon> Add to Bag</Button>
-                    <Button variant="contained" sx={{backgroundColor:`${THEME_COLOR}` , ":hover":{backgroundColor:`${THEME_COLOR}`, opacity:'.8'}}}>
+                    <Button variant="contained" onClick={buyNowHandle} sx={{backgroundColor:`${THEME_COLOR}` , ":hover":{backgroundColor:`${THEME_COLOR}`, opacity:'.8'}}}>
                         <KeyboardDoubleArrowRightOutlinedIcon></KeyboardDoubleArrowRightOutlinedIcon>
                         Buy Now
                     </Button>

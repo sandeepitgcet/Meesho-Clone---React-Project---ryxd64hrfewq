@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useMemo, useState } from "react";
-import {useNavigate} from 'react-router-dom';
+import {useLocation, useNavigate} from 'react-router-dom';
 import {
   AppBar,
   Toolbar,
@@ -19,6 +19,7 @@ const NavBar = () => {
   const [anchorElNav, setAnchorElNav] = useState(null);
   const {user, setUser} = useContext(AuthContext)
   const navigate = useNavigate();
+  const location = useLocation();
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -35,21 +36,24 @@ const NavBar = () => {
     await signOutLogin(auth)
   }
 
+  const show = location.pathname === '/login' || location.pathname === '/signup'
+  console.log(show);
   return (
     <AppBar position="static" color="inherit">
       <Container maxWidth="xl" >
         <Toolbar disableGutters sx={{display:'flex', justifyContent:'space-between'}}>
           <Link to="/" style={{ textDecoration: "none", color: THEME_COLOR, }} >
-            <Typography variant="h6" noWrap sx={{ display: { xs: "none", md: "flex" }, fontFamily: "monospace", fontWeight: 700, color: "inherit",textDecoration: "none",}}>
+            <Typography variant="h6" noWrap sx={{ display: { md: "flex" }, fontFamily: "monospace", fontWeight: 700, color: "inherit",textDecoration: "none",}}>
               MEESHO
             </Typography>
           </Link>
           
           <Box>
             {
-              !user? 
-              <Button variant="outlined" onClick={loginHandle}>Login</Button> :
-              <Button variant="outlined" color="error" onClick={logoutHandle}>SignOut</Button>
+               user? 
+               !show && <Button variant="outlined" color="error" onClick={logoutHandle}>SignOut</Button> :
+               !show && <Button variant="outlined" onClick={loginHandle}>Login</Button>
+              
             }
           </Box>
         </Toolbar>

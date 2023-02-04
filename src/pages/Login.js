@@ -27,6 +27,7 @@ export default function Login() {
   if(user){
     navigate('/')
   }
+
  },[])
 
   const handleSubmit = async (e) => {
@@ -42,7 +43,7 @@ export default function Login() {
       return;
     }else{
       setUser(response)
-      navigate('/')
+      navigate(-1)
     }
   }
   return (
