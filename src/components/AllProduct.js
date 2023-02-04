@@ -25,7 +25,7 @@ const AllProduct = ({allProducts, isLoading}) => {
                         <Grid item sx={{display:'grid', placeItems:'center'}}>
                             <img src={product.image} width="150px" height="200" />
                         </Grid>
-                        <Grid item>{product.category}</Grid>
+                        <Grid item>{product.title}</Grid>
                         <Grid item>₹ {product.price}</Grid>
                         <Grid item>{product.rating.rate} Rating</Grid>
                         <Grid item>{product.rating.count} Reviews</Grid>

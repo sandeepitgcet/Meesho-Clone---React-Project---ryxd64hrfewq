@@ -1,8 +1,34 @@
-import { Grid, Typography, FormControl, InputLabel, Select, MenuItem, Box } from '@mui/material'
-import React, { useState } from 'react'
+import { Grid, Typography, FormControl, InputLabel, Select, MenuItem, Box, OutlinedInput } from '@mui/material'
+import React, { useEffect, useState } from 'react'
+import productArr from './../components/productArray'
+
+const ITEM_HEIGHT = 48;
+const ITEM_PADDING_TOP = 8;
+const MenuProps = {
+    PaperProps: {
+      style: {
+        maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+        width: 250,
+      },
+    },
+  };
 
 const Filter = ({allProducts , setAllProducts}) => {
     const [sortBy, setSortBy] = useState('');
+    const [categories, setCategories] = useState([]);
+    const [selectedCategories, setSelectedCategories] = useState([]);
+
+    useEffect(()=>{
+        // useFetchCategories()
+        //     .then(res => setCategories(res.data))
+        //     .catch(err => console.log(err));
+        
+        const res = ["electronics","jewelery","men's clothing","women's clothing"]
+        setCategories(res)
+        console.log(productArr)
+
+    },[])
+
     const sortByHandle = (e) => {
         setSortBy(e.target.value)
         const data = [...allProducts]
@@ -13,8 +39,20 @@ const Filter = ({allProducts , setAllProducts}) => {
         }
         setAllProducts(data);
     }
+
+    const categoriesHandle = (e) => {
+        setSelectedCategories([...e.target.value])
+        const length = [...e.target.value].length
+        console.log(length);
+        if(length>0){
+            const data = [...allProducts].filter((product) => [...e.target.value].includes(product.category))
+            setAllProducts(data)
+        }else{
+            setAllProducts(productArr)
+        }
+    }
   return (
-    <Box padding={2} width="100%" >
+    <Box padding={2} width="100%" rowGap={5}>
         <Typography variant='h4'>Filters</Typography>
         <Box sx={{display:'flex', flexDirection:'column', rowGap:'5px'}}>
             <Typography variant='h6'>Sort By:</Typography>
@@ -31,7 +69,30 @@ const Filter = ({allProducts , setAllProducts}) => {
                     <MenuItem value='2'>Rating</MenuItem>
                 </Select>
             </FormControl>
-            
+        </Box>
+        <Box sx={{display:'flex', flexDirection:'column', rowGap:'5px'}}>
+            <Typography variant='h6'>Category:</Typography>
+            <FormControl fullWidth>
+                <InputLabel id="categoriesLabel">Categories</InputLabel>
+                <Select
+                    labelId="categoriesLabel"
+                    multiple
+                    value={selectedCategories}
+                    onChange={categoriesHandle}
+                    label="Categories"
+                    renderValue={(selectedCategories) => selectedCategories.join(', ')}
+                    MenuProps={MenuProps}
+                    >
+                    {categories.map((name) => (
+                        <MenuItem
+                        key={name}
+                        value={name}
+                        >
+                        {name}
+                        </MenuItem>
+                    ))}
+                    </Select>
+            </FormControl>
         </Box>
     </Box>
   )
