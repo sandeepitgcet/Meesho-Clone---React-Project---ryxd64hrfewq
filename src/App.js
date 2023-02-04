@@ -1,11 +1,13 @@
 import React, { createContext, useEffect, useState } from 'react'
 import Home from './pages/Home';
 import './styles/App.css';
+import store from './services/redux/store';
+import { Provider } from 'react-redux';
 
 export const THEME_COLOR = "rgb(244,51,151)"
 
 import { createBrowserRouter, RouterProvider, Outlet} from "react-router-dom";
-import Product from "./components/Product";
+import Product from "./pages/Product";
 import ErrorPage from "./pages/ErrorPage";
 import Login from './pages/Login';
 import SignUp from './pages/SignUp';
@@ -55,7 +57,7 @@ const router = createBrowserRouter([
 
 const App = () => {
 
-  const [user, setUser] = useState({});
+  const [user, setUser] = useState(null);
 
   useEffect(() => {
     const handleAuthChange = (userr) => {
@@ -63,7 +65,7 @@ const App = () => {
         setUser(userr)
         return;
       }
-      setUser({});
+      setUser(null);
     };
 
     const unsubscribe = onAuthStateChanged(auth, handleAuthChange);
@@ -73,9 +75,12 @@ const App = () => {
 
 
   return (
+      <Provider store={store}>
         <AuthContext.Provider value={{user,setUser}}>
           <RouterProvider router={router}/>
         </AuthContext.Provider>
+      </Provider>
+        
         
   )
 }

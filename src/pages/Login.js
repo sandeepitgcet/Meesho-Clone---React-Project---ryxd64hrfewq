@@ -24,15 +24,19 @@ export default function Login() {
   console.log("Login Component");
   
  useEffect(()=>{
-  if(user.uid){
+  if(user){
     navigate('/')
   }
  },[])
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true)
     console.log(emailRef.current.value, passwordRef.current.value)
-    const response = await signIn(emailRef.current.value, passwordRef.current.value)
+    const response = await signIn(emailRef.current.value, passwordRef.current.value).then((res)=>{
+      setLoading(false);
+      return res;
+    })
     console.log(response);
     if(response.isError){
       return;
@@ -52,6 +56,7 @@ export default function Login() {
           
         </Form>
         <Typography variant='body1'>Create an Account <Link to={'/signup'}>Sign Up</Link></Typography>
+        {isLoading && <div className='loader'></div>}
       </Box>
   )
 }

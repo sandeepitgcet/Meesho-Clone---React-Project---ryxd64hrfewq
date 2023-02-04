@@ -1,38 +1,47 @@
-import { Button, Typography, Rating } from '@mui/material';
+import { Button, Typography, Rating, Skeleton } from '@mui/material';
 import React, { useEffect, useState } from 'react'
 import { useLocation, useParams } from 'react-router-dom';
 import { styled } from '@mui/material/styles';
-import { Box, height } from '@mui/system';
-import { THEME_COLOR } from './../App';
+import { Box } from '@mui/system';
+import { THEME_COLOR } from '../App';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import KeyboardDoubleArrowRightOutlinedIcon from '@mui/icons-material/KeyboardDoubleArrowRightOutlined';
+import OptimizedImage from '../components/OptimizedImage';
 
-const Image = styled('img')({
-    width: '100%',
-  });
 
 export default function Product() {
-    console.log("Product component");
+    
     const [product,setProduct] = useState({});
+    const [isLoading, setLoading] = useState(false);
     const location = useLocation();
     const params = useParams();
+    
     useEffect(()=>{
-        console.log(params);
+        console.log("Product component");
         fetch('https://content.newtonschool.co/v1/pr/63b6c911af4f30335b4b3b89/products/'+params.id).then(
             response => response.json()
         ).then((data) => {
             console.log(data);
             setProduct(JSON.parse(JSON.stringify(data)));
+            
+        }).finally(()=>{
             console.log(product);
+            //setLoading(false)
         })
     },[])
     
   return (
     <React.Fragment>
         <Box sx={{display:'grid', gridTemplateColumns:'repeat(auto-fit, minmax(550px, 1fr))'}}>
-            <Box sx={{ display: 'flex', justifyContent:'center', padding:'50px', height:'500px'}}>
+        
+            <Box sx={{ display: 'flex', justifyContent:'center', padding:'50px', height:'500px', position:'relative', flexWrap:'wrap'}} id="hashDiv">
                 {/* <Card variant="outlined" sx={{ maxWidth: 345 }}><img src={product.image} height="500" style={{objectFit:"fill"}}/></Card> */}
-                <Image sx={{objectFit:'fill'}} src={product.image} alt="" />
+                
+                {isLoading ? 
+                    <Skeleton variant="rectangular" width={210} height={118} /> : 
+                    <img sx={{objectFit:'fill'}} src={product.image} alt="" width={500} height={500}/>    
+                }
+                
             </Box>
             <Box sx={{ display: 'flex', flexDirection:'column', rowGap:'20px', margin:'20px'}}>
                 <Typography variant='h5'>{product.title}</Typography>
@@ -58,6 +67,7 @@ export default function Product() {
                 </Box>
                 
             </Box>
+            
         </Box>
     </React.Fragment>
   )
