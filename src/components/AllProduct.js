@@ -5,27 +5,10 @@ import useFetchProduct from '../hooks/useFetchProduct';
 import { useDispatch, useSelector } from 'react-redux';
 import { getProduct, setProducts } from './../services/redux/productSlice'
 
-const AllProduct = () => {
-    const [allProducts , setAllProducts] = useState([]);
-    const [isLoading, setLoading] = useState(false);
+const AllProduct = ({allProducts, isLoading}) => {
+
     const navigate = useNavigate();
-    const dispatch = useDispatch();
-    const products = useSelector(state => state.products)
-
-
-    useEffect(()=>{
-        setLoading(true)
-        useFetchProduct().then((res)=>{
-            dispatch(setProducts(res.data))
-            setAllProducts(res.data);
-        }).catch((error)=>{
-            console.log("error while fetching alll products "+ error);
-        }).finally(()=>{
-            setLoading(false);
-        })
-
-    },[])
-
+    
     const openProductHandler = (product) => {
         console.log(product);
         // setSearchParams({id:product.id})
@@ -50,7 +33,7 @@ const AllProduct = () => {
                 </Grid>
             ))
         }
-        {isLoading && <div className='loader'></div>}
+    {isLoading && <div className='loader'></div>}
     </Grid>
   )
 }

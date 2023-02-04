@@ -80,9 +80,9 @@ const Checkout = () => {
     const [activeStep, setActiveStep] = useState(0);
     const [formData, setFormData] = useState({address:'', payment:''});
     useEffect(()=>{
-        // if(!user){
-        //     navigate('/login')
-        // }
+        if(!user){
+            navigate('/login')
+        }
         
         console.log(location)
     },[user])
