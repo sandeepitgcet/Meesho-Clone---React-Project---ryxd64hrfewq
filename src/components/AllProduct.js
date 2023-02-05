@@ -15,7 +15,7 @@ const AllProduct = () => {
             pathname:"/product/"+product.id,
         });
     }
-    console.log("AllProduct component ")
+    
   return (
     <Grid container padding={2} >
         {

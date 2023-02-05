@@ -49,6 +49,7 @@ export const signIn = async (email, password) => {
     const isError = false;
     const USER = await signInWithEmailAndPassword(auth, email, password)
         .catch((error) => {  
+            console.log("Error in signIn")
             console.error(error);
             return error;
         });
@@ -59,7 +60,8 @@ export const signOutLogin = async () => {
     signOutFirebase(auth).then(() => {
         console.log("signed out");
       }).catch((error) => {
-        console.log("signed out");
+        console.log("Error in Sign Out");
+        console.log(error)
       });
 }
 
@@ -67,7 +69,7 @@ export const addUser = async (userId,user) => {
     const res = await addDoc(collection(db, "users"), {...user,'uid':userId}).catch((error) => {
         console.log("Error is "+error);
     });
-    console.log(res);
+    //console.log(res);
     return res;
 }
 

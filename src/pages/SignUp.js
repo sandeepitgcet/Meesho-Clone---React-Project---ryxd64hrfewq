@@ -5,8 +5,9 @@ import Snackbar from '@mui/material/Snackbar';
 import { THEME_COLOR } from '../App';
 import styled from '@emotion/styled';
 import { Form, Link, useNavigate, useRouteError } from 'react-router-dom';
-import { addUser, auth, signUp } from '../services/firebase/auth';
-import { useSelector } from 'react-redux';
+import { signUp } from '../services/firebase/auth';
+import { useDispatch, useSelector } from 'react-redux';
+import { setUserCredentials } from '../services/redux/userSlice';
 
 const SignUpButton = styled(Button)(({ theme }) => ({
   backgroundColor: THEME_COLOR,
@@ -22,6 +23,7 @@ const SignUp = () => {
     const [isLoading, setLoading] = useState(false);
     const navigate = useNavigate();
     const user = useSelector(state=>state.user.userCredentials)
+    const dispatch = useDispatch();
     
     const [open, setOpen] = React.useState(false);
     const [STATUS, setSTATUS] = useState("error");
@@ -42,12 +44,15 @@ const SignUp = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        setLoading(false);
-        const response = await signUp(userInput).then(()=>{
-          setLoading(false);
-        })
-        console.log(response)
-        if(!response?.user){
+        setLoading(true);
+        const response = await signUp(userInput).then((res)=>{
+          dispatch(setUserCredentials(JSON.stringify(res)));
+          return res;
+        }).catch((error) => {
+          console.log(error)
+        }).finally(()=>setLoading(false))
+        //console.log(response)
+        if(response.user){
           navigate('/')
         }else{
           alert("ERROR");
