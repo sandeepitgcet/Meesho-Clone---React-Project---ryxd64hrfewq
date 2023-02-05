@@ -5,6 +5,7 @@ import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, si
 import { doc, getDoc, addDoc } from "firebase/firestore";
 import { useContext } from "react";
 import { AuthContext } from "../../App";
+import { updateProfile } from 'firebase/auth';
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -24,13 +25,19 @@ export const app = initializeApp(firebaseConfig);
 export const auth = getAuth();
 export const db = getFirestore(app);
 
-export const signUp = async (email, password) => {
+export const signUp = async (userInput) => {
     const isError = false;
-    
-    const USER = await createUserWithEmailAndPassword(auth, email, password)
-        .then((userCredential) => userCredential)
-        .catch((error) => {
-            //isError = true;
+    console.log(userInput);
+
+    const USER = await createUserWithEmailAndPassword(auth, userInput.email, userInput.password)
+        .then((userCredential) => {
+            console.log("SIgn Up successfull")
+            updateProfile(auth.currentUser, {
+                displayName:`${userInput.fname} ${userInput.lname}`
+            })
+            addUser(userCredential.user.uid, userInput);
+            return userCredential;
+        }).catch((error) => {
             console.error(error);
             return error;
         });

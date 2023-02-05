@@ -1,13 +1,12 @@
-import React, { useContext, useState } from 'react';
-import NavBar from '../components/NavBar';
-import { Button, FormControl,TextField, Typography } from '@mui/material';
+import React, { useState } from 'react';
+import { Button,TextField, Typography } from '@mui/material';
 import { Box, Alert } from '@mui/material';
 import Snackbar from '@mui/material/Snackbar';
-import { AuthContext, THEME_COLOR } from '../App';
+import { THEME_COLOR } from '../App';
 import styled from '@emotion/styled';
 import { Form, Link, useNavigate, useRouteError } from 'react-router-dom';
 import { addUser, auth, signUp } from '../services/firebase/auth';
-import { updateProfile } from 'firebase/auth';
+import { useSelector } from 'react-redux';
 
 const SignUpButton = styled(Button)(({ theme }) => ({
   backgroundColor: THEME_COLOR,
@@ -18,15 +17,11 @@ const SignUpButton = styled(Button)(({ theme }) => ({
 
 
 const SignUp = () => {
-    const [showPassword, setShowPassword] = useState(false);
-    const [userInput, setUserInput] = useState({fname:'',lname:'', email:'', password:''})
+  
+    const [userInput,setUserInput] = useState({});
+    const [isLoading, setLoading] = useState(false);
     const navigate = useNavigate();
-    const {user, setUser} = useContext(AuthContext)
-
-
-    if(user){
-      navigate('/')
-    }
+    const user = useSelector(state=>state.user.userCredentials)
     
     const [open, setOpen] = React.useState(false);
     const [STATUS, setSTATUS] = useState("error");
@@ -47,31 +42,15 @@ const SignUp = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        //console.log(user);
-        const response = await signUp(userInput.email, userInput.password)
-        console.log("SignUP DOne"+response?.user?.uid);
-
-
-        updateProfile(auth.currentUser, {
-          displayName:userInput.fname+" "+userInput.lname
-        }).catch((error) => {
-          console.log("err is ")
-          console.log(error.message)
-        });
-        
-
-        const addUserResponse  = await addUser(response?.user?.uid, userInput);
-        console.log("User Add to DB "+addUserResponse)
-        if(response.isError){
-          //handleClick(true);
-          return;
-        }else{
-          // setTimeout(()=>{
-          //   handleClick(false);
-          // },3000)
-          setUser(response)
+        setLoading(false);
+        const response = await signUp(userInput).then(()=>{
+          setLoading(false);
+        })
+        console.log(response)
+        if(!response?.user){
           navigate('/')
-          
+        }else{
+          alert("ERROR");
         }
     }
     
@@ -79,10 +58,10 @@ const SignUp = () => {
     <Box padding={2} sx={{ display: 'flex', flexWrap: 'wrap', flexDirection:'column', rowGap:'10px' }}>
       <Typography variant='h4' color={THEME_COLOR} sx={{display:'grid', placeItems:'center'}}>SIGN UP</Typography>
       <Form onSubmit={handleSubmit} style={{ display: 'flex', flexWrap: 'wrap', flexDirection:'column', rowGap:'10px' }}>
-          <TextField fullWidth label="First Name" value={user?.fname} onChange={(e)=>setUserInput({...user, fname:e.target.value})}/>
-          <TextField fullWidth label="Last Name" value={user?.lname} onChange={(e)=>setUserInput({...user, lname:e.target.value})}/>
-          <TextField fullWidth label="Email" value={user?.email} onChange={(e)=>setUserInput({...user, email:e.target.value})}/>
-          <TextField fullWidth label="Password" type={'password'} value={user?.password} onChange={(e)=>setUserInput({...user, password:e.target.value})}/>
+          <TextField fullWidth label="First Name" type={'text'} onChange={(e)=>setUserInput({...userInput, fname:e.target.value})} />
+          <TextField fullWidth label="Last Name" type={'text'} onChange={(e)=>setUserInput({...userInput, lname:e.target.value})} />
+          <TextField fullWidth label="Email" type={'email'} onChange={(e)=>setUserInput({...userInput, email:e.target.value})} />
+          <TextField fullWidth label="Password" type={'password'}  onChange={(e)=>setUserInput({...userInput, password:e.target.value})}  />
           <SignUpButton variant='contained' type='submit'>SIGN UP</SignUpButton>
         
       </Form>
@@ -92,6 +71,7 @@ const SignUp = () => {
           Login {STATUS=="success"?"success":"failed"}
         </Alert>
       </Snackbar>
+      { isLoading && <div className='loader'></div>}
     </Box>
   )
 }

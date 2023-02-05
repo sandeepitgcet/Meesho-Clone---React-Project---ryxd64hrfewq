@@ -14,7 +14,7 @@ const Main = () => {
         const handleAuthChange = (userr) => {
           if (userr) {
             //setUser(userr)
-            dispatch(setUserCredentials(userr))
+            dispatch(setUserCredentials(JSON.stringify(userr)))
             return;
           }
           //setUser(null);

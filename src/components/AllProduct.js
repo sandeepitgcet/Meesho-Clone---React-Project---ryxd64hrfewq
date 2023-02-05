@@ -22,14 +22,13 @@ const AllProduct = () => {
             allProducts.length !== 0 ?
                 allProducts.map((product,index) => (
                     <Grid item xs={12} sm={6}  md={4} lg={3} onClick={()=>openProductHandler(product)} key={index} flexDirection='column' container padding='5px 5px 5px 5px'>
-                        <Box sx={{border:'1px solid gray', borderRadius:'10px',padding:'10px', cursor:'pointer'}}>
+                        <Box sx={{border:'1px solid gray', borderRadius:'10px',padding:'10px', cursor:'pointer', flexWrap:'wrap'}}>
                             <Grid item sx={{display:'grid', placeItems:'center'}}>
-                                <img src={product.image} width="150px" height="200" />
+                                <img src={product.image} width="150px" height="200px" />
                             </Grid>
                             <Grid item>{product.title}</Grid>
                             <Grid item>₹ {product.price}</Grid>
                             <Grid item>{product.rating.rate} Rating</Grid>
-                            <Grid item>{product.rating.count} Reviews</Grid>
                         </Box>
                     </Grid>
                 )) :

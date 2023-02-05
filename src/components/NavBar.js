@@ -79,13 +79,20 @@ const NavBar = () => {
   }
 
   const searchHandle = (e) => {
-    console.log(e.target.value)
+    //console.log(e.target.value)
     let dataValues = [...allProducts];
     if(e.target.value){
       dataValues = dataValues.filter((product) => product.title.toLowerCase().includes(e.target.value))
     }
-    console.log(dataValues);
-    dispatch(setFilteredProducts(dataValues))
+    //console.log(dataValues);
+    if(dataValues.length === 0){
+      alert("No result Found");
+      dispatch(setFilteredProducts(allProducts))
+    }
+    else{
+      dispatch(setFilteredProducts(dataValues))
+    }
+    
     
   }
 
