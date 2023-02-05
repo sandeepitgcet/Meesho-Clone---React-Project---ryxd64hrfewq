@@ -1,5 +1,8 @@
 import { Grid, Typography, FormControl, InputLabel, Select, MenuItem, Box, OutlinedInput } from '@mui/material'
 import React, { useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux';
+import { setFilteredProducts } from '../services/redux/productSlice';
+import useFetchCategories from '../hooks/useFetchCategories';
 import productArr from './../components/productArray'
 
 const ITEM_HEIGHT = 48;
@@ -13,10 +16,13 @@ const MenuProps = {
     },
   };
 
-const Filter = ({allProducts , setAllProducts}) => {
+const Filter = () => {
+
+    const allProducts = useSelector((state) => state.products.allProducts);
     const [sortBy, setSortBy] = useState('');
     const [categories, setCategories] = useState([]);
     const [selectedCategories, setSelectedCategories] = useState([]);
+    const dispatch = useDispatch();
 
     useEffect(()=>{
         // useFetchCategories()
@@ -25,7 +31,7 @@ const Filter = ({allProducts , setAllProducts}) => {
         
         const res = ["electronics","jewelery","men's clothing","women's clothing"]
         setCategories(res)
-        console.log(productArr)
+        //console.log(productArr)
 
     },[])
 
@@ -37,19 +43,17 @@ const Filter = ({allProducts , setAllProducts}) => {
             case '1' : data.sort((a,b) => Number(a.price)<Number(b.price)?1:-1);break;
             case '2': data.sort((a,b) => Number(a.rating.rate)<Number(b.rating.rate)?1:-1);break;
         }
-        setAllProducts(data);
+        dispatch(setFilteredProducts(data));
     }
 
     const categoriesHandle = (e) => {
         setSelectedCategories([...e.target.value])
         const length = [...e.target.value].length
-        console.log(length);
+        let data = [...allProducts]
         if(length>0){
-            const data = [...allProducts].filter((product) => [...e.target.value].includes(product.category))
-            setAllProducts(data)
-        }else{
-            setAllProducts(productArr)
+            data = data.filter((product) => [...e.target.value].includes(product.category))
         }
+        dispatch(setFilteredProducts(data));
     }
   return (
     <Box padding={2} width="100%" rowGap={5}>

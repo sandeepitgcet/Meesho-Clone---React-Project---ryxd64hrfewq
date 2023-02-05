@@ -18,6 +18,8 @@ import { auth, signOut, signOutLogin } from "../services/firebase/auth"
 import { AuthContext, THEME_COLOR } from "../App";
 import { onAuthStateChanged } from "firebase/auth";
 import productsArr from "./productArray";
+import { useDispatch, useSelector } from "react-redux";
+import { setFilteredProducts, setProducts } from "../services/redux/productSlice";
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -61,18 +63,13 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 
 
 const NavBar = () => {
-  const [anchorElNav, setAnchorElNav] = useState(null);
-  const {user, setUser} = useContext(AuthContext)
+  
+  //const {user} = useContext(AuthContext)
+  const user = useSelector(state=> state.user.userCredentials)
   const navigate = useNavigate();
   const location = useLocation();
-
-  const handleOpenNavMenu = (event) => {
-    setAnchorElNav(event.currentTarget);
-  };
-
-  const handleCloseNavMenu = () => {
-    setAnchorElNav(null);
-  };
+  const allProducts = useSelector((state) => state.products.allProducts);
+  const dispatch = useDispatch();
 
   const loginHandle = () => {
     navigate("/login");
@@ -83,12 +80,13 @@ const NavBar = () => {
 
   const searchHandle = (e) => {
     console.log(e.target.value)
-    // if(e.target.value){
-    //   const data = productsArr.filter((product) => product.title)
-    // }else{
-      
-    // }
-    const data = productsArr.filter((product) => product.title)
+    let dataValues = [...allProducts];
+    if(e.target.value){
+      dataValues = dataValues.filter((product) => product.title.toLowerCase().includes(e.target.value))
+    }
+    console.log(dataValues);
+    dispatch(setFilteredProducts(dataValues))
+    
   }
 
   const show = location.pathname === '/login' || location.pathname === '/signup'
@@ -118,7 +116,7 @@ const NavBar = () => {
           
           <Box>
             {
-               user? 
+               Object.keys(user).length? 
                !show && <Button variant="outlined" color="error" onClick={logoutHandle}>SignOut</Button> :
                !show && <Button variant="outlined" onClick={loginHandle}>Login</Button>
               

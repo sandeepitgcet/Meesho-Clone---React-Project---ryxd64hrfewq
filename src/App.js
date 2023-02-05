@@ -6,33 +6,23 @@ import { Provider } from 'react-redux';
 
 export const THEME_COLOR = "rgb(244,51,151)"
 
-import { createBrowserRouter, RouterProvider, Outlet} from "react-router-dom";
+import { createBrowserRouter, RouterProvider} from "react-router-dom";
 import Product from "./pages/Product";
 import ErrorPage from "./pages/ErrorPage";
 import Login from './pages/Login';
 import Checkout from './pages/Checkout'
 import SignUp from './pages/SignUp';
-import { onAuthStateChanged } from 'firebase/auth';
-import { auth } from './services/firebase/auth';
-import NavBar from './components/NavBar';
+import ProtectedRoute from './components/ProtectedRoute';
+import Main from './pages/Main';
 
 //const Login = React.lazy(() => import('./pages/Login'));
 
 export const AuthContext = createContext();
 
-const Root = () => {
-  return (
-    <>
-      <NavBar />
-      <Outlet />
-    </>
-  )
-}
-
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Root />,
+    element: <Main />,
     children: [
       {
         path:'',
@@ -44,15 +34,15 @@ const router = createBrowserRouter([
       },
       {
         path:"login",
-        element: <Login />
+        element: <ProtectedRoute><Login /></ProtectedRoute>
       },
       {
         path:'signup',
-        element: <SignUp />
+        element: <ProtectedRoute><SignUp /></ProtectedRoute>
       },
       {
         path:'checkout',
-        element: <Checkout />
+        element: <ProtectedRoute><Checkout /></ProtectedRoute>
       }
     ]
   },
@@ -66,29 +56,10 @@ const App = () => {
 
   const [user, setUser] = useState(null);
 
-  useEffect(() => {
-    const handleAuthChange = (userr) => {
-      if (userr) {
-        setUser(userr)
-        return;
-      }
-      setUser(null);
-    };
-
-    const unsubscribe = onAuthStateChanged(auth, handleAuthChange);
-
-    return () => unsubscribe();
-  }, []);
-
-
   return (
-      <Provider store={store}>
-        <AuthContext.Provider value={{user,setUser}}>
-          <RouterProvider router={router}/>
-        </AuthContext.Provider>
-      </Provider>
-        
-        
+    <Provider store={store}>
+      <RouterProvider router={router}/>
+    </Provider> 
   )
 }
 

@@ -42,7 +42,7 @@ module.exports = {
         historyApiFallback: true,
         contentBase: './',
         hot: true,
-        liveReload: false,
+        //liveReload: false,
      },
     plugins: [
         new HtmlWebpackPlugin({

@@ -18,16 +18,18 @@ export default function Product() {
     const navigate = useNavigate();
     
     useEffect(()=>{
+        setLoading(true)
         console.log("Product component");
         fetch('https://content.newtonschool.co/v1/pr/63b6c911af4f30335b4b3b89/products/'+params.id).then(
             response => response.json()
         ).then((data) => {
-            console.log(data);
+            //console.log(data);
             setProduct(JSON.parse(JSON.stringify(data)));
             
-        }).finally(()=>{
-            console.log(product);
-            //setLoading(false)
+        }).catch(error => console.log(error))
+        .finally(()=>{
+            //console.log(product);
+            setLoading(false)
         })
     },[])
 

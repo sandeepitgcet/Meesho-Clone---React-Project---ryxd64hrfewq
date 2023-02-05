@@ -1,10 +1,12 @@
 import { Box, Button, FormControl, InputLabel, MenuItem, Select, TextField, Typography } from '@mui/material';
 import React, { useContext, useEffect, useState } from 'react'
-import { Form, useLocation, useNavigate } from 'react-router-dom'
+import { Form, Navigate, useLocation, useNavigate } from 'react-router-dom'
 import { AuthContext, THEME_COLOR } from '../App';
 import Stepper from '@mui/material/Stepper';
 import Step from '@mui/material/Step';
 import StepLabel from '@mui/material/StepLabel';
+import { useSelector } from 'react-redux';
+import Login from './Login';
 
 const steps = [
   'Address',
@@ -75,18 +77,13 @@ const Summary = ({activeStep, formData, product}) => {
 }
 
 const Checkout = () => {
-    const {user} = useContext(AuthContext)
+    //const {user} = useContext(AuthContext)
+    const user = useSelector((state) => state.user.userCredentials)
     const location = useLocation();
     const navigate = useNavigate();
     const [activeStep, setActiveStep] = useState(0);
     const [formData, setFormData] = useState({address:'', payment:''});
-    useEffect(()=>{
-        if(!user){
-            navigate('/login')
-        }
-        
-        console.log(location)
-    },[user])
+    
 
     const changeStepHandler = (index) => {
         setActiveStep(index)

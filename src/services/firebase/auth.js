@@ -35,25 +35,17 @@ export const signUp = async (email, password) => {
             return error;
         });
     //console.log(USER);
-    return {
-        ...USER,
-        'isError': isError
-    };
+    return USER;
 };
 
 export const signIn = async (email, password) => {
     const isError = false;
-    await signInWithEmailAndPassword(auth, email, password)
-        .then((userCredential) => {
-            console.log(userCredential);
-        })
+    const USER = await signInWithEmailAndPassword(auth, email, password)
         .catch((error) => {  
             console.error(error);
-            //isError = true;
+            return error;
         });
-    return {
-        'isError': isError
-    };
+    return USER;
 };
 
 export const signOutLogin = async () => {
