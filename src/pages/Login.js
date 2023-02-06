@@ -25,7 +25,7 @@ export default function Login() {
   const user = useSelector(state => state.user.userCredentials);
   const dispatch = useDispatch();
   
-  console.log("Login Component");
+  //console.log("Login Component");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
