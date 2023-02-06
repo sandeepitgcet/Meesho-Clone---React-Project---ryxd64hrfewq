@@ -96,7 +96,7 @@ const NavBar = () => {
     
   }
 
-  const show = location.pathname === '/login' || location.pathname === '/signup'
+  const show = location.pathname === '/login' || location.pathname === '/signup' || location.pathname === '/checkout'
   //console.log(user)
   return (
     <AppBar position="static" color="inherit">
@@ -123,7 +123,7 @@ const NavBar = () => {
           
           <Box>
             {
-               user.length > 0 ?
+               user.uid ?
                !show && <Button variant="outlined" color="error" onClick={logoutHandle}>SignOut</Button> :
                !show && <Button variant="outlined" onClick={loginHandle}>Login</Button>
               

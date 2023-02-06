@@ -9,6 +9,7 @@ const ProtectedRoute = ({children}) => {
     //console.log(user.uid===true);
 
     useEffect(()=>{
+        //console.log(user);
         if(!user.uid){
            return navigate('/login')
         }

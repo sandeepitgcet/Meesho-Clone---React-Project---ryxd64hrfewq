@@ -30,7 +30,7 @@ export default function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true)
-    console.log(emailRef.current.value, passwordRef.current.value)
+    //console.log(emailRef.current.value, passwordRef.current.value)
     const emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
     let errors = [];
     if(!emailRef.current.value){

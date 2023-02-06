@@ -13,7 +13,10 @@ export const userSlice = createSlice({
             state.userDetails = action.payload;
         },
         setUserCredentials : (state,action) => {
-            state.userCredentials = action.payload;
+            if(action.payload.length>0)
+                state.userCredentials = JSON.parse(action.payload);
+            else    
+                state.userCredentials = {}
         }
     }
 })
