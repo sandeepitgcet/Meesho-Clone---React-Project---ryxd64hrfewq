@@ -36,6 +36,7 @@ const Filter = () => {
     },[])
 
     const sortByHandle = (e) => {
+        setSelectedCategories([])
         setSortBy(e.target.value)
         const data = [...allProducts]
         switch(e.target.value){
@@ -47,6 +48,7 @@ const Filter = () => {
     }
 
     const categoriesHandle = (e) => {
+        setSortBy('')
         setSelectedCategories([...e.target.value])
         const length = [...e.target.value].length
         let data = [...allProducts]
