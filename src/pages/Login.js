@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useRef, useState } from 'react'
-import { Button,TextField, Typography } from '@mui/material';
+import { Alert, Button,TextField, Typography } from '@mui/material';
 import { Box } from '@mui/material';
 import { AuthContext, THEME_COLOR } from '../App';
 import styled from '@emotion/styled';
@@ -16,7 +16,7 @@ const LoginButton = styled(Button)(({ theme }) => ({
 }));
 
 export default function Login() {
-  const [showPassword, setShowPassword] = useState(false);
+  const [error, setError] = useState([]);
   const [isLoading, setLoading] = useState(false);
   const emailRef = useRef(null);
   const passwordRef = useRef(null);
@@ -31,6 +31,23 @@ export default function Login() {
     e.preventDefault();
     setLoading(true)
     console.log(emailRef.current.value, passwordRef.current.value)
+    const emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+    let errors = [];
+    if(!emailRef.current.value){
+      errors.push('Email cannot be empty')
+    }else if(!emailRegex.test(emailRef.current.value)){
+      errors.push('Invalid Email')
+    }
+    if(!emailRef.current.value){
+      errors.push('Password cannot be empty')
+    }else if(passwordRef.current.value.length < 8){
+      errors.push('Password length should be at least 8 letters')
+    }
+    if(errors.length>0){
+      setError([...errors])
+      setLoading(false);
+      return;
+    }
     const response = await signIn(emailRef.current.value, passwordRef.current.value).then((res)=>{
       setLoading(false);
       dispatch(setUserCredentials(JSON.stringify(res.user)))
@@ -52,9 +69,11 @@ export default function Login() {
       <Box padding={2} sx={{ display: 'flex', flexWrap: 'wrap', flexDirection:'column', rowGap:'10px'}}>
         <Typography variant='h4' color={THEME_COLOR} sx={{display:'grid', placeItems:'center'}}>LOGIN</Typography>
         <Form onSubmit={handleSubmit} style={{ display: 'flex', flexWrap: 'wrap', flexDirection:'column', rowGap:'10px' }}>
-            
-            <TextField fullWidth label="Email" id='email' name='email' inputRef={emailRef} />
-            <TextField fullWidth label="Password" id='password' type={'password'} name='password' inputRef={passwordRef} />
+            { error.length !== 0 && 
+                error.map(e => <Alert severity="error">{e}</Alert>)
+            }
+            <TextField fullWidth label="Email" id='email' name='email' inputRef={emailRef} onChange={()=>setError([])} />
+            <TextField fullWidth label="Password" id='password' type={'password'} name='password' inputRef={passwordRef} onChange={()=>setError([])}/>
             <LoginButton variant='contained' type='submit'>Login</LoginButton>
           
         </Form>

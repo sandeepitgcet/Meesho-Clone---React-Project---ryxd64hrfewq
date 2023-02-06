@@ -4,21 +4,30 @@ import { collection, getFirestore } from "firebase/firestore";
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut as signOutFirebase } from "firebase/auth";
 import { addDoc } from "firebase/firestore";
 import { updateProfile } from 'firebase/auth';
+import process from "process";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
 // Your web app's Firebase configuration
-console.log(process.env.REACT_APP_API_KEY)
-
+console.log(process.env)
 
 const firebaseConfig = {
-  apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
-  authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN,
-  projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID,
-  storageBucket: process.env.REACT_APP_FIREBASE_STORAGE_BUCKET,
-  messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGING_SENDER_ID,
-  appId: process.env.REACT_APP_FIREBASE_APP_ID
+    apiKey: 'AIzaSyCHZZh2fpKcvOyKSllhw7CYUAkWRzZ2acU',
+    authDomain: 'myshop-d8e99.firebaseapp.com',
+    projectId: 'myshop-d8e99',
+    storageBucket: 'myshop-d8e99.appspot.com',
+    messagingSenderId: '113102324625',
+    appId: '1:113102324625:web:b607badda251c88e04d030'
 };
+
+// const firebaseConfig = {
+//   apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
+//   authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN,
+//   projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID,
+//   storageBucket: process.env.REACT_APP_FIREBASE_STORAGE_BUCKET,
+//   messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGING_SENDER_ID,
+//   appId: process.env.REACT_APP_FIREBASE_APP_ID
+// };
 
 // Initialize Firebase
 export const app = initializeApp(firebaseConfig);

@@ -21,6 +21,7 @@ const SignUp = () => {
   
     const [userInput,setUserInput] = useState({});
     const [isLoading, setLoading] = useState(false);
+    const [error, setError] = useState([]);
     const navigate = useNavigate();
     const user = useSelector(state=>state.user.userCredentials)
     const dispatch = useDispatch();
@@ -44,29 +45,49 @@ const SignUp = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        setLoading(true);
-        const response = await signUp(userInput).then((res)=>{
-          dispatch(setUserCredentials(JSON.stringify(res)));
-          return res;
-        }).catch((error) => {
-          console.log(error)
-        }).finally(()=>setLoading(false))
-        //console.log(response)
-        if(response.user){
-          navigate('/')
-        }else{
-          alert("ERROR");
+        //setLoading(true);
+        const emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
+        let errors = [];
+        if(!userInput.email){
+          errors.push('Email cannot be empty');
+        }else if(!emailRegex.test(userInput.email)){
+          errors.push('Invalid Email')
         }
+        if(!userInput.password){
+          errors.push('Password cannot be Empty')
+        }else if(userInput.password.length < 8){
+          errors.push('Password length should be at least 8 letters')
+        }
+        if(errors.length>0){
+          setError([...errors])
+          setLoading(false);
+          return;
+        }
+        // const response = await signUp(userInput).then((res)=>{
+        //   dispatch(setUserCredentials(JSON.stringify(res)));
+        //   return res;
+        // }).catch((error) => {
+        //   console.log(error)
+        // }).finally(()=>setLoading(false))
+        // //console.log(response)
+        // if(response.user){
+        //   navigate('/')
+        // }else{
+        //   alert("ERROR");
+        // }
     }
     
   return (
     <Box padding={2} sx={{ display: 'flex', flexWrap: 'wrap', flexDirection:'column', rowGap:'10px' }}>
       <Typography variant='h4' color={THEME_COLOR} sx={{display:'grid', placeItems:'center'}}>SIGN UP</Typography>
       <Form onSubmit={handleSubmit} style={{ display: 'flex', flexWrap: 'wrap', flexDirection:'column', rowGap:'10px' }}>
+            { error.length !== 0 && 
+                error.map(e => <Alert key={e} severity="error">{e}</Alert>)
+            }
           <TextField fullWidth label="First Name" type={'text'} onChange={(e)=>setUserInput({...userInput, fname:e.target.value})} />
           <TextField fullWidth label="Last Name" type={'text'} onChange={(e)=>setUserInput({...userInput, lname:e.target.value})} />
-          <TextField fullWidth label="Email" type={'email'} onChange={(e)=>setUserInput({...userInput, email:e.target.value})} />
-          <TextField fullWidth label="Password" type={'password'}  onChange={(e)=>setUserInput({...userInput, password:e.target.value})}  />
+          <TextField fullWidth label="Email" onChange={(e)=>{setUserInput({...userInput, email:e.target.value}); setError([]) }} />
+          <TextField fullWidth label="Password" type={'password'}  onChange={(e)=>{setUserInput({...userInput, password:e.target.value}); setError([])}}  />
           <SignUpButton variant='contained' type='submit'>SIGN UP</SignUpButton>
         
       </Form>
