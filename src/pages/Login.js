@@ -58,7 +58,8 @@ export default function Login() {
     })
     
     if(!response.user){
-      alert("Wrong credentials");
+      //alert("Wrong credentials");
+      setError(['Wrong Credentials'])
       return;
     }else{
       navigate('/')
@@ -70,7 +71,7 @@ export default function Login() {
         <Typography variant='h4' color={THEME_COLOR} sx={{display:'grid', placeItems:'center'}}>LOGIN</Typography>
         <Form onSubmit={handleSubmit} style={{ display: 'flex', flexWrap: 'wrap', flexDirection:'column', rowGap:'10px' }}>
             { error.length !== 0 && 
-                error.map(e => <Alert severity="error">{e}</Alert>)
+                error.map(e => <Alert key={e} severity="error">{e}</Alert>)
             }
             <TextField fullWidth label="Email" id='email' name='email' inputRef={emailRef} onChange={()=>setError([])} />
             <TextField fullWidth label="Password" id='password' type={'password'} name='password' inputRef={passwordRef} onChange={()=>setError([])}/>

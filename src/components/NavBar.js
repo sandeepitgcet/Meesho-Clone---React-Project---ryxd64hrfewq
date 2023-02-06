@@ -123,7 +123,7 @@ const NavBar = () => {
           
           <Box>
             {
-               Object.keys(user).length? 
+               user ?
                !show && <Button variant="outlined" color="error" onClick={logoutHandle}>SignOut</Button> :
                !show && <Button variant="outlined" onClick={loginHandle}>Login</Button>
               
