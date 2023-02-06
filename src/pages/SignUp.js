@@ -45,7 +45,7 @@ const SignUp = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        //setLoading(true);
+        setLoading(true);
         const emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
         let errors = [];
         if(!userInput.email){
@@ -63,18 +63,18 @@ const SignUp = () => {
           setLoading(false);
           return;
         }
-        // const response = await signUp(userInput).then((res)=>{
-        //   dispatch(setUserCredentials(JSON.stringify(res)));
-        //   return res;
-        // }).catch((error) => {
-        //   console.log(error)
-        // }).finally(()=>setLoading(false))
-        // //console.log(response)
-        // if(response.user){
-        //   navigate('/')
-        // }else{
-        //   alert("ERROR");
-        // }
+        const response = await signUp(userInput).then((res)=>{
+          dispatch(setUserCredentials(JSON.stringify(res)));
+          return res;
+        }).catch((error) => {
+          console.log(error)
+        }).finally(()=>setLoading(false))
+        //console.log(response)
+        if(response.user){
+          navigate('/')
+        }else{
+          alert("ERROR");
+        }
     }
     
   return (
