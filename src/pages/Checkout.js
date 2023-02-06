@@ -82,17 +82,17 @@ const Summary = ({activeStep, formData, product}) => {
   return (
     <Box padding={1} display="flex" flexDirection={'column'} rowGap="20px" alignItems={'center'}>
       <Typography variant='h4'>{steps[activeStep]}</Typography>
-      <ul>
+      <ul style={{display:'flex', flexDirection:'column', alignItems:'flex-start'}}>
         {
           checkoutProducts.map((prods) => (
-            <React.Fragment key={prods.title}>
+            <li key={prods.title}>
               <Typography variant='h5'>{prods.title}</Typography>
               <img src={prods.image} alt="" style={{objectFit:'fill', height:'200px', width:'200px'}}/>
               <Box sx={{margin:'20px'}}>
                 <Typography variant='h6'>Category:</Typography>
                 <Typography variant='p'>{prods.category}</Typography>
               </Box>
-            </React.Fragment>
+            </li>
             
           ))
         }
