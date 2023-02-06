@@ -7,6 +7,8 @@ import { THEME_COLOR } from '../App';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import KeyboardDoubleArrowRightOutlinedIcon from '@mui/icons-material/KeyboardDoubleArrowRightOutlined';
 import OptimizedImage from '../components/OptimizedImage';
+import { useDispatch } from 'react-redux';
+import { addToBag } from '../services/redux/productSlice';
 
 
 export default function Product() {
@@ -16,6 +18,7 @@ export default function Product() {
     const location = useLocation();
     const params = useParams();
     const navigate = useNavigate();
+    const dispatch = useDispatch();
     
     useEffect(()=>{
         setLoading(true)
@@ -38,6 +41,10 @@ export default function Product() {
             state:product
         })
     }
+
+    const addProductToBag = () => {
+        dispatch(addToBag());
+    }
     
   return (
     <React.Fragment>
@@ -56,7 +63,7 @@ export default function Product() {
                 <Typography variant='h5'>{product.title}</Typography>
                 <Typography variant='h4'>{'₹'+product.price}</Typography>
                 <Box sx={{ display:'flex', justifyContent:'space-evenly'}}>
-                    <Button variant="outlined"><ShoppingCartIcon></ShoppingCartIcon> Add to Bag</Button>
+                    <Button variant="outlined" onClick={addProductToBag}><ShoppingCartIcon></ShoppingCartIcon> Add to Bag</Button>
                     <Button variant="contained" onClick={buyNowHandle} sx={{backgroundColor:`${THEME_COLOR}` , ":hover":{backgroundColor:`${THEME_COLOR}`, opacity:'.8'}}}>
                         <KeyboardDoubleArrowRightOutlinedIcon></KeyboardDoubleArrowRightOutlinedIcon>
                         Buy Now

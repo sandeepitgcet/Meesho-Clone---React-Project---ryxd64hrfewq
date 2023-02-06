@@ -1,7 +1,20 @@
-import React from 'react'
-import { Grid, Box } from '@mui/material'
+import React, { useState } from 'react'
+import { Grid, Box, Skeleton } from '@mui/material'
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
+
+const Image = ({src}) => {
+    const [isLoading,setLoading] = useState(true);
+
+    return (
+        <>
+                <Skeleton variant='rectangular' width={150} height={200}>
+                    <img src={src} width="150px" height="200px"  />
+                </Skeleton> 
+                
+        </>
+    )
+}
 
 const AllProduct = () => {
 

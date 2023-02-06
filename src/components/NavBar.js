@@ -11,7 +11,8 @@ import {
 } from "@mui/material";
 import SearchIcon from '@mui/icons-material/Search';
 import { styled, alpha } from '@mui/material/styles';
-
+import ShoppingCartCheckoutOutlinedIcon from '@mui/icons-material/ShoppingCartCheckoutOutlined';
+import { Badge } from  '@mui/material'
 
 import { Link } from "react-router-dom";
 import { auth, signOut, signOutLogin } from "../services/firebase/auth"
@@ -69,6 +70,7 @@ const NavBar = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const allProducts = useSelector((state) => state.products.allProducts);
+  const checkoutBag = useSelector((state) => state.products.checkoutBag);
   const dispatch = useDispatch();
 
   const loginHandle = () => {
@@ -121,7 +123,10 @@ const NavBar = () => {
           </Box>
           
           
-          <Box>
+          <Box >
+          <Badge badgeContent={checkoutBag} color="secondary" sx={{':hover':{cursor:'pointer'}, marginRight:'25px'}} >
+            <ShoppingCartCheckoutOutlinedIcon color="secondary" />
+          </Badge>
             {
                user.uid ?
                !show && <Button variant="outlined" color="error" onClick={logoutHandle}>SignOut</Button> :
