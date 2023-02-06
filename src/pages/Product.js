@@ -19,7 +19,7 @@ export default function Product() {
     
     useEffect(()=>{
         setLoading(true)
-        console.log("Product component");
+        //console.log("Product component");
         fetch('https://content.newtonschool.co/v1/pr/63b6c911af4f30335b4b3b89/products/'+params.id).then(
             response => response.json()
         ).then((data) => {
