@@ -63,6 +63,8 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 
+
+
 const NavBar = () => {
   
   //const {user} = useContext(AuthContext)
@@ -70,7 +72,7 @@ const NavBar = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const allProducts = useSelector((state) => state.products.allProducts);
-  const checkoutBag = useSelector((state) => state.products.checkoutBag);
+  const checkoutProducts = useSelector((state) => state.products.checkoutProducts);
   const dispatch = useDispatch();
 
   const loginHandle = () => {
@@ -124,7 +126,7 @@ const NavBar = () => {
           
           
           <Box >
-          <Badge badgeContent={checkoutBag} color="secondary" sx={{':hover':{cursor:'pointer'}, marginRight:'25px'}} >
+          <Badge badgeContent={checkoutProducts.length} color="secondary" sx={{':hover':{cursor:'pointer'}, marginRight:'25px'}} >
             <ShoppingCartCheckoutOutlinedIcon color="secondary" />
           </Badge>
             {

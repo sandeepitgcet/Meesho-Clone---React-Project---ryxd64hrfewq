@@ -8,7 +8,7 @@ import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import KeyboardDoubleArrowRightOutlinedIcon from '@mui/icons-material/KeyboardDoubleArrowRightOutlined';
 import OptimizedImage from '../components/OptimizedImage';
 import { useDispatch } from 'react-redux';
-import { addToBag } from '../services/redux/productSlice';
+import { addToBag, checkoutProducts } from '../services/redux/productSlice';
 
 
 export default function Product() {
@@ -37,13 +37,14 @@ export default function Product() {
     },[])
 
     const buyNowHandle = () => {
+        dispatch(checkoutProducts(product));
         navigate('/checkout', {
             state:product
         })
     }
 
     const addProductToBag = () => {
-        dispatch(addToBag());
+        dispatch(checkoutProducts(product));
     }
     
   return (

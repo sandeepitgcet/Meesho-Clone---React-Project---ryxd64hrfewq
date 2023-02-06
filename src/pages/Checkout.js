@@ -5,8 +5,9 @@ import { AuthContext, THEME_COLOR } from '../App';
 import Stepper from '@mui/material/Stepper';
 import Step from '@mui/material/Step';
 import StepLabel from '@mui/material/StepLabel';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import Login from './Login';
+import { checkoutProducts, clearCheckoutProducts } from '../services/redux/productSlice';
 
 const steps = [
   'Address',
@@ -15,19 +16,38 @@ const steps = [
 ];
 
 const Address = ({activeStep, setActiveStep, formData, setFormData}) => {
+
+  const confirmAddress = () => {
+    if(!formData.address){
+      alert("Please enter the address");
+      return;
+    }
+    setActiveStep(activeStep+1)
+  }
+
   const addressChangeHandler = (e) => {
+  
     setFormData({...formData, address:e.target.value});
   }
   return (
     <Box padding={1} display="flex" flexDirection={'column'} rowGap="20px">
       <Typography variant='h4'>{steps[activeStep]}</Typography>
-      <TextField placeholder='Enter Addresss' value={formData.address} onChange={addressChangeHandler} />
-      <Button  variant='contained'  onClick={()=>setActiveStep(activeStep+1)} sx={{backgroundColor:THEME_COLOR}}>Deliver to this Address</Button>
+      <TextField placeholder='Enter Addresss' value={formData.address} onChange={addressChangeHandler}  required />
+      <Button  variant='contained' onClick={confirmAddress} sx={{backgroundColor:THEME_COLOR}}>Deliver to this Address</Button>
     </Box>
   )
 }
 
 const Payment = ({activeStep, setActiveStep, formData, setFormData}) => {
+
+  const confirmPayment = (e) => {
+    if(!formData.payment){
+      alert("Please select payment option");
+      return;
+    }
+    setActiveStep(activeStep+1)
+  }
+
   return (
     <Box padding={1} display="flex" flexDirection={'column'} rowGap="20px">
       <Typography variant='h4'>{steps[activeStep]}</Typography>
@@ -38,31 +58,45 @@ const Payment = ({activeStep, setActiveStep, formData, setFormData}) => {
           value={formData.payment}
           label="Select Payment"
           onChange={(e)=>setFormData({...formData, payment:e.target.value})}
+          required
         >
           <MenuItem value='Cash on Delivery'>Cash On Delivery</MenuItem>
         </Select>
       </FormControl>
       
-      <Button variant='contained' onClick={()=>setActiveStep(activeStep+1)} sx={{backgroundColor:THEME_COLOR}}>Continue</Button>
+      <Button variant='contained' onClick={confirmPayment} sx={{backgroundColor:THEME_COLOR}}>Continue</Button>
     </Box>
   )
 }
 
 const Summary = ({activeStep, formData, product}) => {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
+  const checkoutProducts = useSelector((state) => state.products.checkoutProducts);
+
   const placeOrderHandle = () => {
+      dispatch(clearCheckoutProducts())
       alert("Order Placed");
       navigate('/')
   }
   return (
     <Box padding={1} display="flex" flexDirection={'column'} rowGap="20px" alignItems={'center'}>
       <Typography variant='h4'>{steps[activeStep]}</Typography>
-      <Typography variant='h5'>{product.title}</Typography>
-      <img src={product.image} alt="" style={{objectFit:'fill', height:'500px', width:'500px'}}/>
-      <Box sx={{margin:'20px'}}>
-        <Typography variant='h6'>Category:</Typography>
-        <Typography variant='p'>{product.category}</Typography>
-      </Box>
+      <ul>
+        {
+          checkoutProducts.map((prods) => (
+            <React.Fragment key={prods.title}>
+              <Typography variant='h5'>{prods.title}</Typography>
+              <img src={prods.image} alt="" style={{objectFit:'fill', height:'200px', width:'200px'}}/>
+              <Box sx={{margin:'20px'}}>
+                <Typography variant='h6'>Category:</Typography>
+                <Typography variant='p'>{prods.category}</Typography>
+              </Box>
+            </React.Fragment>
+            
+          ))
+        }
+      </ul>
       <Box sx={{margin:'20px'}}>
         <Typography variant='h6'>Address:</Typography>
         <Typography variant='p'>{formData.address}</Typography>
@@ -74,6 +108,26 @@ const Summary = ({activeStep, formData, product}) => {
       <Button variant='contained' sx={{backgroundColor:THEME_COLOR}} onClick={placeOrderHandle}>Place Order</Button>
     </Box>
   )
+}
+
+const CheckOutProductsComponent = () => {
+    const checkoutProducts = useSelector(state => state.products.checkoutProducts);
+
+    return (
+        <Box padding={2} sx={{display:'flex', flexDirection:'column', justifyContent:'center'}}>
+          <Typography variant='h5'>Checkout Products</Typography>
+          {
+            checkoutProducts.map((product,index) => (
+              <Box key={index} padding="10px" display='flex' justifyContent='space-between'>
+                  <Typography variant='body2'>{product.title}</Typography>
+                  <Typography variant='body2'>{product.price}</Typography>
+
+              </Box>
+            ))
+          }
+          <Typography variant='h5'>Total Price: {checkoutProducts.reduce((total,curr)=> total+curr.price , 0)}</Typography>
+        </Box>
+    )
 }
 
 const Checkout = () => {
@@ -91,6 +145,7 @@ const Checkout = () => {
 
   return (
     <Box padding={2} display="flex" flexDirection={'column'} rowGap={"50px"}>
+        <CheckOutProductsComponent />
         <Stepper activeStep={activeStep} alternativeLabel>
           {steps.map((label, index) => (
             <Step key={label} onClick={() => changeStepHandler(index)}>

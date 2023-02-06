@@ -3,7 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 let initialStateData = {
     allProducts:[],
     filteredProducts:[],
-    checkoutBag:0
+    checkoutProducts:[]
 }
 
 export const productSlice = createSlice({
@@ -17,12 +17,18 @@ export const productSlice = createSlice({
         setFilteredProducts : (state,action) => {
             state.filteredProducts = action.payload;
         },
-        addToBag : (state) => {
-            state.checkoutBag = state.checkoutBag+1;
+        checkoutProducts : (state,action) => {
+            state.checkoutProducts = [...state.checkoutProducts, action.payload]
+        },
+        removeFromCheckoutProducts : (state,action) => {
+            state.checkoutProducts = [...state.checkoutProducts].filter((product) => product.id !== action.payload.id )
+        },
+        clearCheckoutProducts : (state) => {
+            state.checkoutProducts = []
         }
     }
 })
 
-export const {setProducts, setFilteredProducts, addToBag} = productSlice.actions
+export const {setProducts, setFilteredProducts, checkoutProducts, removeFromCheckoutProducts, clearCheckoutProducts} = productSlice.actions
 
 export default productSlice.reducer
