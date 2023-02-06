@@ -97,7 +97,7 @@ const NavBar = () => {
   }
 
   const show = location.pathname === '/login' || location.pathname === '/signup'
-  
+  //console.log(user)
   return (
     <AppBar position="static" color="inherit">
       <Container maxWidth="xl" >
@@ -123,7 +123,7 @@ const NavBar = () => {
           
           <Box>
             {
-               user ?
+               user.length > 0 ?
                !show && <Button variant="outlined" color="error" onClick={logoutHandle}>SignOut</Button> :
                !show && <Button variant="outlined" onClick={loginHandle}>Login</Button>
               
