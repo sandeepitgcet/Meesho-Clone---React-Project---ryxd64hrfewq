@@ -141,6 +141,7 @@ const CheckOutProductsComponent = () => {
 const Checkout = () => {
     //const {user} = useContext(AuthContext)
     const user = useSelector((state) => state.user.userCredentials)
+    const checkoutProducts = useSelector(state => state.products.checkoutProducts);
     const location = useLocation();
     const navigate = useNavigate();
     const [activeStep, setActiveStep] = useState(0);
@@ -154,22 +155,30 @@ const Checkout = () => {
   return (
     <Box padding={2} display="flex" flexDirection={'column'} rowGap={"50px"}>
         <CheckOutProductsComponent />
-        <Stepper activeStep={activeStep} alternativeLabel>
-          {steps.map((label, index) => (
-            <Step key={label} onClick={() => changeStepHandler(index)}>
-              <StepLabel>{label}</StepLabel>
-            </Step>
-          ))}
-        </Stepper>
-        <Form>
-          {
-            activeStep === 0 ? 
-              <Address activeStep={activeStep} setActiveStep={setActiveStep} formData={formData} setFormData={setFormData}/> :
-              activeStep === 1 ?
-                <Payment activeStep={activeStep} setActiveStep={setActiveStep} formData={formData} setFormData={setFormData}/> :
-                <Summary activeStep={activeStep} formData={formData} product={location.state}/>
-          }
-        </Form>
+        {
+          checkoutProducts.length === 0 ?
+            <Typography variant='h4'>No Products to Buy</Typography> :
+            <>
+            <Stepper activeStep={activeStep} alternativeLabel>
+              {steps.map((label, index) => (
+                <Step key={label} onClick={() => changeStepHandler(index)}>
+                  <StepLabel>{label}</StepLabel>
+                </Step>
+              ))}
+            </Stepper>
+            <Form>
+              {
+                activeStep === 0 ? 
+                  <Address activeStep={activeStep} setActiveStep={setActiveStep} formData={formData} setFormData={setFormData}/> :
+                  activeStep === 1 ?
+                    <Payment activeStep={activeStep} setActiveStep={setActiveStep} formData={formData} setFormData={setFormData}/> :
+                    <Summary activeStep={activeStep} formData={formData} product={location.state}/>
+              }
+            </Form>
+
+            </>
+        }
+        
         
     </Box>
   )
