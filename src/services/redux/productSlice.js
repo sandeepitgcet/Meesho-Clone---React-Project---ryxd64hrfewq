@@ -21,7 +21,11 @@ export const productSlice = createSlice({
             state.checkoutProducts = [...state.checkoutProducts, action.payload]
         },
         removeFromCheckoutProducts : (state,action) => {
-            state.checkoutProducts = [...state.checkoutProducts].filter((product) => product.id !== action.payload.id )
+            //state.checkoutProducts = [...state.checkoutProducts].filter((product) => product.id !== action.payload.id )
+            const arr = [...state.checkoutProducts]
+            arr.splice(state.checkoutProducts.findIndex((p)=>p.id == action.id),1);
+            console.log("arr is "+arr);
+            state.checkoutProducts = arr;
         },
         clearCheckoutProducts : (state) => {
             state.checkoutProducts = []

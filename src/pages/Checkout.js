@@ -5,9 +5,10 @@ import { AuthContext, THEME_COLOR } from '../App';
 import Stepper from '@mui/material/Stepper';
 import Step from '@mui/material/Step';
 import StepLabel from '@mui/material/StepLabel';
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import { useDispatch, useSelector } from 'react-redux';
 import Login from './Login';
-import { checkoutProducts, clearCheckoutProducts } from '../services/redux/productSlice';
+import { checkoutProducts, clearCheckoutProducts, removeFromCheckoutProducts } from '../services/redux/productSlice';
 
 const steps = [
   'Address',
@@ -31,7 +32,7 @@ const Address = ({activeStep, setActiveStep, formData, setFormData}) => {
   }
   return (
     <Box padding={1} display="flex" flexDirection={'column'} rowGap="20px">
-      <Typography variant='h4'>{steps[activeStep]}</Typography>
+      <Typography variant='h4'>{steps[activeStep]} </Typography>
       <TextField placeholder='Enter Addresss' value={formData.address} onChange={addressChangeHandler}  required />
       <Button  variant='contained' onClick={confirmAddress} sx={{backgroundColor:THEME_COLOR}}>Deliver to this Address</Button>
     </Box>
@@ -102,9 +103,14 @@ const Summary = ({activeStep, formData, product}) => {
         <Typography variant='p'>{formData.address}</Typography>
       </Box>
       <Box sx={{margin:'20px'}}>
-        <Typography variant='h6'>Payment:</Typography>
+        <Typography variant='h6'>Payment Type:</Typography>
         <Typography variant='p'>{formData.payment}</Typography>
       </Box>
+      <Box sx={{margin:'20px'}}>
+        <Typography variant='h6'>Total Amount:</Typography>
+        <Typography variant='p'>{'₹ '+checkoutProducts.reduce((total,curr)=> total+curr.price , 0)}</Typography>
+      </Box>
+
       <Button variant='contained' sx={{backgroundColor:THEME_COLOR}} onClick={placeOrderHandle}>Place Order</Button>
     </Box>
   )
@@ -112,16 +118,18 @@ const Summary = ({activeStep, formData, product}) => {
 
 const CheckOutProductsComponent = () => {
     const checkoutProducts = useSelector(state => state.products.checkoutProducts);
-
+    const dispatch = useDispatch();
+    const deleteHandle = (product) => {
+      dispatch(removeFromCheckoutProducts(product))
+    }
     return (
         <Box padding={2} sx={{display:'flex', flexDirection:'column', justifyContent:'center'}}>
           <Typography variant='h5'>Checkout Products</Typography>
           {
             checkoutProducts.map((product,index) => (
               <Box key={index} padding="10px" display='flex' justifyContent='space-between'>
-                  <Typography variant='body2'>{product.title}</Typography>
-                  <Typography variant='body2'>{product.price}</Typography>
-
+                  <Typography variant='body2'>{product.title} <DeleteForeverIcon color='error' onClick={()=>deleteHandle(product)} sx={{':hover':{cursor:'pointer'}}}/></Typography>
+                  <Typography variant='body2'>{'₹'+product.price}</Typography>
               </Box>
             ))
           }
